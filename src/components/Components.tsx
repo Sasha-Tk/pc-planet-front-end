@@ -1,8 +1,32 @@
 import {CategoryItem} from "./CategoryItem";
-import React from "react";
+import React, {useEffect} from "react";
 import {Link} from "react-router-dom";
 
 export const Components = () => {
+    useEffect(() => {
+        const categoryItems = Array.from(document.getElementsByClassName("category-item"));
+        const addClasses = (event: Event) => {
+            categoryItems
+                .filter(el => !el.contains(event.target as Node))
+                .forEach(el => el.classList.add("category-item-not-selected"));
+        }
+        const removeClasses = ()=>{
+            categoryItems
+                .forEach(el => el.classList.remove("category-item-not-selected"));
+        }
+        categoryItems.forEach(value => {
+                value.addEventListener('mouseover', addClasses);
+                value.addEventListener('mouseleave', removeClasses);
+            }
+        )
+        return ()=>{
+            categoryItems.forEach(value => {
+                    value.removeEventListener('mouseover', addClasses);
+                    value.removeEventListener('mouseleave', removeClasses);
+                }
+            )
+        }
+    })
 
     const cardsInfo = [
         {
@@ -60,13 +84,12 @@ export const Components = () => {
         <div className={"content"}>
             <div className={"categories"}>
                 {cardsInfo.map((cardInfo: any, key) =>
-                    <Link key={key} to={'/components/' + cardInfo.cardName}>
-                        <CategoryItem
-                                      cardName={cardInfo.cardName}
-                                      cardTitle={cardInfo.cardTitle}
-                                      picWidth={cardInfo.picWidth}
-                        />
-                    </Link>
+                    <CategoryItem
+                        key={key}
+                        cardName={cardInfo.cardName}
+                        cardTitle={cardInfo.cardTitle}
+                        picWidth={cardInfo.picWidth}
+                    />
                 )}
             </div>
         </div>)
