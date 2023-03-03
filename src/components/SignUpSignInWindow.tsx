@@ -34,7 +34,8 @@ export const SignUpSignInWindow = () => {
     useEffect(() => {
         registrationWindowActive ? disableScroll.on() : disableScroll.off();
         setPasswordVisibility(false);
-        setAgreeState(false)
+        setAgreeState(false);
+        setRegistrationWindowState(RegistrationWindowState.signInState);
     }, [registrationWindowActive])
     useEffect(() => {
         const inputs = Array.from(document.getElementsByClassName("password-visibility"));
