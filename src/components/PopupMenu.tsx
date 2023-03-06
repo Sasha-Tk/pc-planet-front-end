@@ -23,9 +23,9 @@ export const PopupMenu = (props: any) => {
             }
         }
         const handleClickOutside = (event: Event) => {
-            console.log(popupRef.current);
-            console.log(event.target as Node);
-            console.log((!popupRef.current.contains(event.target as Node)));
+            // console.log(popupRef.current);
+            // console.log(event.target as Node);
+            // console.log((!popupRef.current.contains(event.target as Node)));
             if ((!popupRef.current?.contains(event.target as Node) && event.target !== button)
                 || Array.from(document.getElementsByClassName(props.closeElementClass))
                     .some(el => el.contains(event.target as Node))) {

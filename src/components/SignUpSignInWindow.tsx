@@ -55,10 +55,10 @@ export const SignUpSignInWindow = () => {
             <p className={"register-window-title"}>Log in</p>
             <form className={"register-form sign-in-form"} autoComplete={"off"}>
                 <div className="email-input">
-                    <input className={"register-window-input"} id={"email-input"} type={"email"} placeholder={"Email"}/>
+                    <input className={"register-window-input input"} id={"email-input"} type={"email"} placeholder={"Email"}/>
                 </div>
                 <div className="password-input">
-                    <input className={"register-window-input password-visibility"}
+                    <input className={"register-window-input input password-visibility"}
                            id={"password-input"} type={"password"}
                            placeholder={"Password"}/>
                     <div className="eye-icon"
@@ -89,14 +89,14 @@ export const SignUpSignInWindow = () => {
             <p className={"register-window-title"}>Sign up</p>
             <form className={"register-form sign-up-form"} autoComplete={"off"}>
                 <div className="email-input">
-                    <input className={"register-window-input"} id={"email-input"} type={"email"} placeholder={"Email"}/>
+                    <input className={"register-window-input input"} id={"email-input"} type={"email"} placeholder={"Email"}/>
                 </div>
                 <div className="user-name-input">
-                    <input className={"register-window-input"} id={"user-name-input"} type={"text"}
+                    <input className={"register-window-input input"} id={"user-name-input"} type={"text"}
                            placeholder={"User name"}/>
                 </div>
                 <div className="password-input">
-                    <input className={"register-window-input password-visibility"}
+                    <input className={"register-window-input input password-visibility"}
                            id={"password-input"} type={"password"}
                            placeholder={"Password"}/>
                     <div className="eye-icon"
@@ -104,7 +104,7 @@ export const SignUpSignInWindow = () => {
                         {passwordVisibility ? <EyeIcon/> : <OffEyeIcon/>}
                     </div>
                 </div>
-                <input className={"register-window-input password-visibility"}
+                <input className={"register-window-input input password-visibility"}
                        id={"password-confirmation-input"} type={"password"}
                        placeholder={"Confirm password"}/>
                 <div className="registration-agreement">

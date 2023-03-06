@@ -1,5 +1,5 @@
-import {Link, NavLink} from "react-router-dom";
-import React, {createContext, useContext, useState} from "react";
+import {NavLink} from "react-router-dom";
+import React, {useContext, useState} from "react";
 import {ReactComponent as LightLogo} from "../images/svg/light-icon.svg";
 import {ReactComponent as DarkLogo} from "../images/svg/dark-icon.svg";
 import {ReactComponent as LogInIcon} from "../images/svg/log-in-icon.svg";
@@ -9,10 +9,12 @@ import {ReactComponent as SunIcon} from "../images/svg/sun-icon.svg";
 import {ReactComponent as MoonIcon} from "../images/svg/moon-icon.svg";
 import {ReactComponent as UAIcon} from "../images/svg/ua-flag-icon.svg";
 import {ReactComponent as ENIcon} from "../images/svg/en-flag-icon.svg";
-import {ReactComponent as MenuBurgerIcon} from "../images/svg/menu-burger-icon.svg";
+
+
 import {PopupMenu} from "./PopupMenu";
 import {AppContext} from "../App";
 import {SignUpSignInWindow} from "./SignUpSignInWindow";
+import {NavSearchPanel} from "./NavSearchPanel";
 
 enum BurgerMenuState {
     navigationState,
@@ -41,7 +43,7 @@ export const Navigation = () => {
     const profilePopupWidows = new Map<PopupMenuState, JSX.Element>();
     profilePopupWidows.set(PopupMenuState.globalState, <div className="menu-dropdown-option-list">
         <div
-            className="menu-dropdown-option-list-item "
+            className="menu-dropdown-option-list-item"
             onClick={() => setModalWindowState(PopupMenuState.themeState)}
         >
             Theme
@@ -115,6 +117,11 @@ export const Navigation = () => {
         <div className={'menu-dropdown-option-list-item'}>
             <NavLink to={'/guides'} className={props => props.isActive ? 'link active-link' : 'link'}>
                 Guides
+            </NavLink>
+        </div>
+        <div className={'menu-dropdown-option-list-item'}>
+            <NavLink to={'/search   '} className={props => props.isActive ? 'link active-link' : 'link'}>
+                Search
             </NavLink>
         </div>
         <div className={'menu-dropdown-option-list-item'}
@@ -217,7 +224,7 @@ export const Navigation = () => {
                 <NavLink to={'/guides'} className={props => props.isActive ? 'active-link' : ''}>
                     <div className={'link'}>Guides</div>
                 </NavLink>
-
+                <NavSearchPanel/>
                 <div className="drop-down">
                     <div className={"drop-down-button"} id={"drop-down-button-id"}>Profile</div>
                     <div className="menu-drop-down">

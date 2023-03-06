@@ -6,6 +6,7 @@ import {Components} from "./components/Components";
 import {Navigation} from "./components/Navigation";
 import {Build} from "./components/Build";
 import {SignUpSignInWindow} from "./components/SignUpSignInWindow";
+import {Search} from "./components/Search";
 
 export const AppContext = createContext<any>(null);
 
@@ -31,6 +32,7 @@ function App() {
                     <Routes>
                         <Route path={'/components'} element={<Components/>}/>
                         <Route path={'/create-build'} element={<Build/>}/>
+                        <Route path={'/search/*'} element={<Search/>}/>
                     </Routes>
                 </BrowserRouter>
             </AppContext.Provider>
