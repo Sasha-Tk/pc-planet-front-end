@@ -2,16 +2,17 @@ import React, {createContext, useEffect, useState} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import './App.css';
 
-import {Components} from "./components/Components";
+import {Components} from "./pages/Components";
 import {Navigation} from "./components/Navigation";
-import {Build} from "./components/Build";
+import {Build} from "./pages/Build";
 import {SignUpSignInWindow} from "./components/SignUpSignInWindow";
-import {Search} from "./components/Search";
+import {Search} from "./pages/Search";
+import {ComponentList} from "./pages/ComponentList";
 
 export const AppContext = createContext<any>(null);
 
 function App() {
-    const [darkThemeActive, setDarkThemeActive] = useState(true);
+    const [darkThemeActive, setDarkThemeActive] = useState(false);
     // setInterval(() => {
     //     setDarkThemeActive(prevState => !prevState);
     // }, 1000)
@@ -33,6 +34,7 @@ function App() {
                         <Route path={'/components'} element={<Components/>}/>
                         <Route path={'/create-build'} element={<Build/>}/>
                         <Route path={'/search/*'} element={<Search/>}/>
+                        <Route path={'/components/:categoryName'} element={<ComponentList/>}/>
                     </Routes>
                 </BrowserRouter>
             </AppContext.Provider>

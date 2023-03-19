@@ -1,4 +1,4 @@
-import {PopupMenu} from "./PopupMenu";
+import {PopupMenu} from "../components/PopupMenu";
 
 import React, {useState} from "react";
 

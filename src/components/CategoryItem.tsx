@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useEffect} from "react";
 
 interface Props {
@@ -11,14 +11,14 @@ export const CategoryItem = (props: Props) => {
 
 
     return (
-        <div className="category-item">
-            <Link to={'/components/' + props.cardName}>
+        <Link to={`/components/${props.cardName}`}>
+            <div className="category-item">
                 <div className="category-item-pic-holder">
                     <img className={"category-item-pic"} src={require(`../images/${props.cardName}-pic.png`)}
                          alt={props.cardName} width={props.picWidth}/>
                 </div>
                 <p className={"category-item-title"}>{props.cardTitle}</p>
-            </Link>
-        </div>
+            </div>
+        </Link>
     );
 }
