@@ -5,18 +5,26 @@ import './App.css';
 import {Components} from "./pages/Components";
 import {Navigation} from "./components/Navigation";
 import {Build} from "./pages/Build";
-import {SignUpSignInWindow} from "./components/SignUpSignInWindow";
 import {Search} from "./pages/Search";
 import {ComponentList} from "./pages/ComponentList";
 
 export const AppContext = createContext<any>(null);
 
 function App() {
-    const [darkThemeActive, setDarkThemeActive] = useState(false);
-    // setInterval(() => {
-    //     setDarkThemeActive(prevState => !prevState);
-    // }, 1000)
+    const themeFromStorage = localStorage.getItem("darkThemeActive")
+    const [darkThemeActive, setDarkThemeActive] = useState(themeFromStorage !== null ? JSON.parse(themeFromStorage) : false);
+    const userFromStorage = localStorage.getItem("userInfo")
+    const [user, setUser] = useState(userFromStorage !== null ? JSON.parse(userFromStorage) : null);
+
+    useEffect(() => {
+        localStorage.setItem("userInfo", JSON.stringify(user))
+    }, [user])
+    useEffect(() => {
+        localStorage.setItem("darkThemeActive", JSON.stringify(darkThemeActive))
+    }, [darkThemeActive])
+
     const [registrationWindowActive, setRegistrationWindowActive] = useState(false);
+    //TODO: FIX THEME VISUAL BLINKING WHILE RELOADING PAGE
     useEffect(() => {
         document.getElementsByTagName("html")[0].style.background =
             darkThemeActive ? "var(--html-bg-dark-theme)" : "var(--html-bg-light-theme)";
@@ -26,19 +34,17 @@ function App() {
     return (
         <div className="App">
             <AppContext.Provider
-                value={{darkThemeActive, setDarkThemeActive, registrationWindowActive, setRegistrationWindowActive}}>
+                value={{darkThemeActive, setDarkThemeActive, registrationWindowActive, setRegistrationWindowActive, user, setUser}}>
                 <BrowserRouter>
                     <Navigation/>
-
                     <Routes>
                         <Route path={'/components'} element={<Components/>}/>
                         <Route path={'/create-build'} element={<Build/>}/>
-                        <Route path={'/search/*'} element={<Search/>}/>
-                        <Route path={'/components/:categoryName'} element={<ComponentList/>}/>
+                        <Route path={'/search/:search'} element={<Search/>}/>
+                        <Route path={'/components/:categoryName/:page?'} element={<ComponentList/>}/>
                     </Routes>
                 </BrowserRouter>
             </AppContext.Provider>
-
         </div>
     );
 }

@@ -1,8 +1,9 @@
-import {NavLink} from "react-router-dom";
+import {matchPath, NavLink, useNavigate} from "react-router-dom";
 import React, {useContext, useState} from "react";
 import {ReactComponent as LightLogo} from "../images/svg/light-icon.svg";
 import {ReactComponent as DarkLogo} from "../images/svg/dark-icon.svg";
 import {ReactComponent as LogInIcon} from "../images/svg/log-in-icon.svg";
+import {ReactComponent as LogOutIcon} from "../images/svg/log-out-icon.svg";
 import {ReactComponent as RightArrowIcon} from "../images/svg/right-arrow-icon.svg";
 import {ReactComponent as LeftArrowIcon} from "../images/svg/left-arrow-icon.svg";
 import {ReactComponent as SunIcon} from "../images/svg/sun-icon.svg";
@@ -15,6 +16,8 @@ import {PopupMenu} from "./PopupMenu";
 import {AppContext} from "../App";
 import {SignUpSignInWindow} from "./SignUpSignInWindow";
 import {NavSearchPanel} from "./NavSearchPanel";
+import {Confirmation} from "./Confirmation";
+import {NavigationLink} from "./NavigationLink";
 
 enum BurgerMenuState {
     navigationState,
@@ -30,16 +33,22 @@ enum PopupMenuState {
 }
 
 
-export const Navigation = () => {
+export const Navigation = (props: any) => {
     const {
         darkThemeActive,
         setDarkThemeActive,
         registrationWindowActive,
-        setRegistrationWindowActive
+        setRegistrationWindowActive,
+        user,
+        setUser
     } = useContext(AppContext);
-
+    const isMenuPageActive = (path: string) => {
+        return !!matchPath({path: `/${path}/*`}, document.location.pathname)
+    }
     const [modalWindowState, setModalWindowState] = useState(PopupMenuState.globalState);
     const [burgerMenuState, setBurgerMenuState] = useState(BurgerMenuState.navigationState);
+    const [logoutConfirmation, setLogOutConfirmation] = useState(false)
+    const navigate = useNavigate();
     const profilePopupWidows = new Map<PopupMenuState, JSX.Element>();
     profilePopupWidows.set(PopupMenuState.globalState, <div className="menu-dropdown-option-list">
         <div
@@ -56,10 +65,26 @@ export const Navigation = () => {
             Language
             <RightArrowIcon/>
         </div>
+        {user && <div
+            className="menu-dropdown-option-list-item close-popup-element"
+            onClick={() => {
+
+            }}
+        >
+            Settings
+        </div>}
         <div className="menu-dropdown-option-list-item close-popup-element"
-             onClick={() => setRegistrationWindowActive(true)}>
-            Log in
-            <LogInIcon/>
+             onClick={() => {
+                 if (user === null) {
+                     setRegistrationWindowActive(true)
+                 } else {
+                     setLogOutConfirmation(true)
+                     // setUser(null)
+                 }
+             }}
+        >
+            {user === null ? "Log in" : "Log out"}
+            {user === null ? <LogInIcon/> : <LogOutIcon/>}
         </div>
     </div>)
     profilePopupWidows.set(PopupMenuState.themeState, <div className="menu-dropdown-option-list ">
@@ -103,52 +128,55 @@ export const Navigation = () => {
     </div>)
 
     const burgerMenuWindows = new Map<BurgerMenuState, JSX.Element>();
-    burgerMenuWindows.set(BurgerMenuState.navigationState, <div className="menu-dropdown-option-list flex-center">
-        <div className={'menu-dropdown-option-list-item'}>
-            <NavLink to={'/components'} className={props => props.isActive ? 'link active-link' : 'link'}>
+    burgerMenuWindows.set(BurgerMenuState.navigationState,
+        <div className="menu-dropdown-option-list">
+            <div className={'menu-dropdown-option-list-item ' + (isMenuPageActive('components') ? 'selected-item' : '')}
+                 onClick={() => {
+                     navigate('/components')
+                 }}
+            >
                 Components
-            </NavLink>
-        </div>
-        <div className={'menu-dropdown-option-list-item'}>
-            <NavLink to={'/create-build'} className={props => props.isActive ? 'link active-link' : 'link'}>
+            </div>
+            <div
+                className={'menu-dropdown-option-list-item ' + (isMenuPageActive('create-build') ? 'selected-item' : '')}
+                onClick={() => navigate('/create-build')}
+            >
                 Create build
-            </NavLink>
-        </div>
-        <div className={'menu-dropdown-option-list-item'}>
-            <NavLink to={'/guides'} className={props => props.isActive ? 'link active-link' : 'link'}>
+            </div>
+            <div
+                className={'menu-dropdown-option-list-item ' + (isMenuPageActive('guides') ? 'selected-item' : '')}
+                onClick={() => navigate('/guides')}
+            >
                 Guides
-            </NavLink>
-        </div>
-        <div className={'menu-dropdown-option-list-item'}>
-            <NavLink to={'/search   '} className={props => props.isActive ? 'link active-link' : 'link'}>
+            </div>
+            <div
+                className={'menu-dropdown-option-list-item ' + (isMenuPageActive('search') ? 'selected-item' : '')}
+                onClick={() => navigate('/search')}
+            >
                 Search
-            </NavLink>
-        </div>
-        <div className={'menu-dropdown-option-list-item'}
-             onClick={() => {
-                 setTimeout(() => setBurgerMenuState(BurgerMenuState.profileState), 0);
-             }}>
-            Profile
-        </div>
-    </div>);
+            </div>
+            <div className={'menu-dropdown-option-list-item'}
+                //TODO: fix bug (maybe fixed)
+                 onClick={() => {
+                     setTimeout(() => setBurgerMenuState(BurgerMenuState.profileState), 0);
+                 }}>
+                {user === null ? "Profile" : user.username}
+            </div>
+        </div>);
     burgerMenuWindows.set(BurgerMenuState.profileState, <div className="menu-dropdown-option-list">
         <div
             className="menu-dropdown-option-list-item"
-            //TODO: fix bug
             onClick={() => {
-                setTimeout(() => setBurgerMenuState(BurgerMenuState.navigationState), 0);
+                setBurgerMenuState(BurgerMenuState.navigationState);
             }}
-            // onClick={() => {
-            //     setBurgerMenuState(BurgerMenuState.navigationState);
-            // }}
         >
             <LeftArrowIcon/>
             Back
         </div>
         <div
-            className="menu-dropdown-option-list-item "
+            className="menu-dropdown-option-list-item"
             onClick={() => {
-                setTimeout(() => setBurgerMenuState(BurgerMenuState.themeState), 0);
+                setBurgerMenuState(BurgerMenuState.themeState);
             }}
         >
             Theme
@@ -157,17 +185,24 @@ export const Navigation = () => {
         <div
             className="menu-dropdown-option-list-item"
             onClick={() => {
-                setTimeout(() => setBurgerMenuState(BurgerMenuState.languageState), 0);
+                setBurgerMenuState(BurgerMenuState.languageState);
             }}
         >
             Language
             <RightArrowIcon/>
         </div>
-        <div className="menu-dropdown-option-list-item close-popup-element"
-             onClick={() => setRegistrationWindowActive(true)}
+        <div className="menu-dropdown-option-list-item"
+             onClick={() => {
+                 if (user === null) {
+                     setRegistrationWindowActive(true)
+                 } else {
+                     setLogOutConfirmation(true)
+                     // setUser(null)
+                 }
+             }}
         >
-            Log in
-            <LogInIcon/>
+            {user === null ? "Log in" : "Log out"}
+            {user === null ? <LogInIcon/> : <LogOutIcon/>}
         </div>
     </div>);
     burgerMenuWindows.set(BurgerMenuState.themeState, <div className="menu-dropdown-option-list ">
@@ -210,58 +245,70 @@ export const Navigation = () => {
         </div>
     </div>);
     return (
-        <div className={"header"}>
-            <div className={"navigation"}>
-                <NavLink to={'/home'}>
-                    <div className="logo">{darkThemeActive ? <DarkLogo/> : <LightLogo/>}</div>
-                </NavLink>
-                <NavLink to={'/components'} className={props => props.isActive ? 'active-link' : ''}>
-                    <div className={'link'}>Components</div>
-                </NavLink>
-                <NavLink to={'/create-build'} className={props => props.isActive ? 'active-link' : ''}>
-                    <div className={'link'}>Create build</div>
-                </NavLink>
-                <NavLink to={'/guides'} className={props => props.isActive ? 'active-link' : ''}>
-                    <div className={'link'}>Guides</div>
-                </NavLink>
-                <NavSearchPanel/>
-                <div className="drop-down">
-                    <div className={"drop-down-button"} id={"drop-down-button-id"}>Profile</div>
-                    <div className="menu-drop-down">
-                        <PopupMenu
-                            openButtonComponentID={"drop-down-button-id"}
-                            visibleClass={"menu-drop-down-visible"}
-                            contentClass={"menu-drop-down-wrapper"}
-                            defaultWindow={PopupMenuState.globalState}
-                            setDefaultWindow={setModalWindowState}
-                            closeElementClass={"close-popup-element"}
-                        >
-                            {profilePopupWidows.get(modalWindowState)}
-                        </PopupMenu>
+        <>
+            <div className={"header"}>
+                <div className={"navigation"}>
+                    <NavLink to={'/home'}>
+                        <div className="logo">{darkThemeActive ? <DarkLogo/> : <LightLogo/>}</div>
+                    </NavLink>
+                    <NavigationLink link={'/components'}>
+                        Components
+                    </NavigationLink>
+                    <NavigationLink link={'/create-build'}>
+                        Create build
+                    </NavigationLink>
+                    <NavigationLink link={'/guides'}>
+                        Guides
+                    </NavigationLink>
+                    <NavSearchPanel/>
+                    <div className="drop-down">
+                        <div className={"drop-down-button"} id={"drop-down-button-id"}>
+                            {user === null ? "Profile" : user.username}
+                        </div>
+                        <div className="menu-drop-down">
+                            <PopupMenu
+                                openButtonComponentID={"drop-down-button-id"}
+                                visibleClass={"menu-drop-down-visible"}
+                                contentClass={"menu-drop-down-wrapper"}
+                                defaultWindow={PopupMenuState.globalState}
+                                setDefaultWindow={setModalWindowState}
+                                closeElementClass={"close-popup-element"}
+                            >
+                                {profilePopupWidows.get(modalWindowState)}
+                            </PopupMenu>
+                        </div>
+                    </div>
+                    <div className="burger">
+                        <div className="burger-menu-button" id="burger-menu-button-id">
+                            <span id="burger-first-line"/>
+                            <span id="burger-second-line"/>
+                            <span id="burger-third-line"/>
+                            <span id="burger-fourth-line"/>
+                        </div>
+                        <div className="burger-menu">
+                            <PopupMenu
+                                openButtonComponentID={"burger-menu-button-id"}
+                                visibleClass={"burger-menu-visible"}
+                                contentClass={"burger-menu-wrapper"}
+                                defaultWindow={BurgerMenuState.navigationState}
+                                setDefaultWindow={setBurgerMenuState}
+                                closeElementClass={"close-popup-element"}
+                            >
+                                {burgerMenuWindows.get(burgerMenuState)}
+                            </PopupMenu>
+                        </div>
                     </div>
                 </div>
-                <div className="burger">
-                    <div className="burger-menu-button" id="burger-menu-button-id">
-                        <span id="burger-first-line"/>
-                        <span id="burger-second-line"/>
-                        <span id="burger-third-line"/>
-                        <span id="burger-fourth-line"/>
-                    </div>
-                    <div className="burger-menu">
-                        <PopupMenu
-                            openButtonComponentID={"burger-menu-button-id"}
-                            visibleClass={"burger-menu-visible"}
-                            contentClass={"burger-menu-wrapper"}
-                            defaultWindow={BurgerMenuState.navigationState}
-                            setDefaultWindow={setBurgerMenuState}
-                            closeElementClass={"close-popup-element"}
-                        >
-                            {burgerMenuWindows.get(burgerMenuState)}
-                        </PopupMenu>
-                    </div>
-                </div>
+                <SignUpSignInWindow></SignUpSignInWindow>
             </div>
-            <SignUpSignInWindow></SignUpSignInWindow>
-        </div>
+            <Confirmation
+                visibility={logoutConfirmation}
+                setVisibility={setLogOutConfirmation}
+                confirmationFunction={() => setUser(null)}
+                rejectionFunction={() => {
+                }}
+
+            />
+        </>
     )
 }

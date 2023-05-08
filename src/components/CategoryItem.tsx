@@ -1,5 +1,4 @@
-import {Link, useParams} from "react-router-dom";
-import {useEffect} from "react";
+import {Link} from "react-router-dom";
 
 interface Props {
     cardName: string;

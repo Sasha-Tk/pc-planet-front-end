@@ -1,5 +1,8 @@
+import {useParams} from "react-router-dom";
+
 export const Search = () => {
-  return(<div className={"content"}>
-      search page
-  </div>)
+    useParams()
+    return (<div className={"content"}>
+        search page
+    </div>)
 }

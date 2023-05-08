@@ -1,8 +1,9 @@
 import {Link, useParams} from "react-router-dom";
 import {ItemCard} from "../components/ItemCard";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Filter} from "../components/Filter";
 import {cardsInfo} from "./Components";
+import {Pagination} from "../components/Pagination";
 
 
 export interface FilterItemType {
@@ -17,7 +18,7 @@ interface FilterType {
 }
 
 export const ComponentList = (props: any) => {
-    const {categoryName} = useParams();
+    const {categoryName, page} = useParams();
 
     const [filters, setFilters] = useState<FilterType[]>([
         {
@@ -222,6 +223,10 @@ export const ComponentList = (props: any) => {
         }
     ]);
 
+    useEffect(() => {
+
+    }, [page]);
+
 
     const changeFilters = (filterTitle: string, currentID: number, newValue: boolean) => {
         const changedFilter = [...filters];
@@ -237,7 +242,7 @@ export const ComponentList = (props: any) => {
         setFilters(changedFilter);
     }
     const cancelFilters = () => {
-        const changedFilter = [...filters];
+        // const changedFilter = [...filters];
         filters.forEach((value) => {
             value.availableFilters.forEach(value => {
                 value.filterItemState = false;
@@ -263,16 +268,17 @@ export const ComponentList = (props: any) => {
                             </div>
                         </Link>
                     </div>
-                    {filters.map(filter => filter.availableFilters.map(currentFilter =>
-                        currentFilter.filterItemState &&
-                        <div className="filter-button">
-                            {currentFilter.filterItemName}
-                            <div className="close-filter-button"
-                                 onClick={() => changeFilters(filter.filterTitle, currentFilter.id, false)}>
-                                <span id="close-filter-button-first-line"></span>
-                                <span id="close-filter-button-second-line"></span>
-                            </div>
-                        </div>))}
+                    {filters.map((filter, i) =>
+                        filter.availableFilters.map((currentFilter, j) =>
+                            currentFilter.filterItemState &&
+                            <div key={`${i}${j}`} className="filter-button">
+                                {currentFilter.filterItemName}
+                                <div className="close-filter-button"
+                                     onClick={() => changeFilters(filter.filterTitle, currentFilter.id, false)}>
+                                    <span id="close-filter-button-first-line"></span>
+                                    <span id="close-filter-button-second-line"></span>
+                                </div>
+                            </div>))}
                 </div>
 
 
@@ -286,78 +292,84 @@ export const ComponentList = (props: any) => {
                             />
                         )}
                     </div>
-                    <div className="items">
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
+                    <div className="items-wrapper">
+                        <div className="items">
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White Asus RTX 3060 Dual OC"}>
 
-                        </ItemCard>
+                            </ItemCard>
 
-                        <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
+                            <ItemCard itemName={"Asus RTX 3060 Dual OC White"}>
 
-                        </ItemCard>
+                            </ItemCard>
+                        </div>
+                        <Pagination
+                            location={`/components/${categoryName}`}
+                            maxPageNumber={20}
+                        />
                     </div>
                 </div>
             </div>
