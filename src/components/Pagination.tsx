@@ -1,22 +1,26 @@
-import {NavLink, useNavigate, useParams} from "react-router-dom";
-import {useState} from "react";
+import {NavLink, useLocation, useNavigate, useParams} from "react-router-dom";
+import {useEffect} from "react";
 
 //TODO: use lib react-pagination instead this
 export const Pagination = (props: any) => {
+
     const navigation = useNavigate()
     let {location, maxPageNumber} = props
-    const {page} = useParams();
-    const [pageNumber, setPageNumber] = useState(page === undefined ? 1 : Number(page));
+    const url = useLocation()
+    let {pageNumber, setPageNumber} = props
 
     const changePageNumber = (delta: number) => {
         if (pageNumber + delta >= 1 && pageNumber + delta <= maxPageNumber) {
             setPageNumber(pageNumber + delta)
-            changeLocation(pageNumber + delta)
         }
     }
+    useEffect(() => {
+        changeLocation(pageNumber)
+    }, [pageNumber])
 
     const changeLocation = (pageNumber: number) => {
-        navigation(`${location}${pageNumber !== 1 ? '/' + pageNumber : ""}`)
+        navigation(`${location}${pageNumber !== 1 ? '/' + pageNumber : ""}${url.search}`)
+        window.scrollTo(0, 0)
     }
 
     let buttons: number[]
@@ -43,12 +47,11 @@ export const Pagination = (props: any) => {
             <div className="pagination-buttons-list">
                 <div className="pagination-button" onClick={() => changePageNumber(-1)}>{'<'}</div>
                 {buttonsNames.map((value, i) =>
-                    <NavLink key={i} to={`${location}${buttons[i] !== 1 ? '/' + buttons[i] : ""}`}>
+                    <NavLink key={i} to={`${location}${buttons[i] !== 1 ? '/' + buttons[i] : ""}${url.search}`}>
                         <div
                             className={`pagination-button ${pageNumber === buttons[i] ? "selected-item" : ""}`}
                             onClick={() => {
                                 setPageNumber(buttons[i])
-                                changeLocation(buttons[i])
                             }}>
                             {value}
                         </div>

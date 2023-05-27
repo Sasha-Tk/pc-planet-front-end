@@ -14,14 +14,14 @@ export const cardsInfo = [
         picWidth: 190
     },
     {
-        cardName: "gpu",
-        cardTitle: "GPU",
-        picWidth: 270
-    },
-    {
         cardName: "ram",
         cardTitle: "RAM",
         picWidth: 200
+    },
+    {
+        cardName: "gpu",
+        cardTitle: "GPU",
+        picWidth: 270
     },
     {
         cardName: "psu",
@@ -41,7 +41,7 @@ export const cardsInfo = [
     {
         cardName: "hdd",
         cardTitle: "HDD",
-        picWidth: 220
+        picWidth: 160
     },
     {
         cardName: "cpu-fan",
@@ -50,35 +50,35 @@ export const cardsInfo = [
     },
     {
         cardName: "case-fan",
-        cardTitle: "Case fan",
+        cardTitle: "Case Fan",
         picWidth: 220
     }]
 
 export const Components = () => {
-    useEffect(() => {
-        const categoryItems = Array.from(document.getElementsByClassName("category-item"));
-        const addClasses = (event: Event) => {
-            categoryItems
-                .filter(el => !el.contains(event.target as Node))
-                .forEach(el => el.classList.add("category-item-not-selected"));
-        }
-        const removeClasses = ()=>{
-            categoryItems
-                .forEach(el => el.classList.remove("category-item-not-selected"));
-        }
-        categoryItems.forEach(value => {
-                value.addEventListener('mouseover', addClasses);
-                value.addEventListener('mouseleave', removeClasses);
-            }
-        )
-        return ()=>{
-            categoryItems.forEach(value => {
-                    value.removeEventListener('mouseover', addClasses);
-                    value.removeEventListener('mouseleave', removeClasses);
-                }
-            )
-        }
-    })
+    // useEffect(() => {
+    //     const categoryItems = Array.from(document.getElementsByClassName("category-item"));
+    //     const addClasses = (event: Event) => {
+    //         categoryItems
+    //             .filter(el => !el.contains(event.target as Node))
+    //             .forEach(el => el.classList.add("category-item-not-selected"));
+    //     }
+    //     const removeClasses = ()=>{
+    //         categoryItems
+    //             .forEach(el => el.classList.remove("category-item-not-selected"));
+    //     }
+    //     categoryItems.forEach(value => {
+    //             value.addEventListener('mouseover', addClasses);
+    //             value.addEventListener('mouseleave', removeClasses);
+    //         }
+    //     )
+    //     return ()=>{
+    //         categoryItems.forEach(value => {
+    //                 value.removeEventListener('mouseover', addClasses);
+    //                 value.removeEventListener('mouseleave', removeClasses);
+    //             }
+    //         )
+    //     }
+    // })
 
     return (
         <div className={"content"}>

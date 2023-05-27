@@ -1,5 +1,5 @@
 import {matchPath, NavLink, useNavigate} from "react-router-dom";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {ReactComponent as LightLogo} from "../images/svg/light-icon.svg";
 import {ReactComponent as DarkLogo} from "../images/svg/dark-icon.svg";
 import {ReactComponent as LogInIcon} from "../images/svg/log-in-icon.svg";
@@ -16,7 +16,7 @@ import {PopupMenu} from "./PopupMenu";
 import {AppContext} from "../App";
 import {SignUpSignInWindow} from "./SignUpSignInWindow";
 import {NavSearchPanel} from "./NavSearchPanel";
-import {Confirmation} from "./Confirmation";
+import {ConfirmationWindow} from "./ConfirmationWindow";
 import {NavigationLink} from "./NavigationLink";
 
 enum BurgerMenuState {
@@ -301,13 +301,14 @@ export const Navigation = (props: any) => {
                 </div>
                 <SignUpSignInWindow></SignUpSignInWindow>
             </div>
-            <Confirmation
+            <ConfirmationWindow
+                message={"Are you sure you want to"}
+                action={"logout"}
                 visibility={logoutConfirmation}
                 setVisibility={setLogOutConfirmation}
                 confirmationFunction={() => setUser(null)}
                 rejectionFunction={() => {
                 }}
-
             />
         </>
     )
