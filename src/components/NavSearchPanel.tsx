@@ -1,17 +1,26 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {ReactComponent as SearchIcon} from "../images/svg/search-icon.svg";
-import {Link, NavLink, useNavigate} from "react-router-dom";
-import {PopupMenu} from "./PopupMenu";
+import {useNavigate} from "react-router-dom";
 import data from "../test-data/data.json"
 import {SearchResultItem} from "./SearchResultItem";
+import axios from "axios";
+import {useTranslation} from "./Language";
 
 export const NavSearchPanel = () => {
     const [inputIsVisible, setInputVisibility] = useState(false);
     const [searchingValue, setSearchingValue] = useState("");
     const [filteredData, setFilteredData] = useState<any>([]);
+    const {translate} = useTranslation()
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearchingValue(event.target.value);
-        setFilteredData(data.filter(element => element["item-name"].toLowerCase().includes(event.target.value.toLowerCase())));
+        setSearchingValue(event.target.value.trim());
+        if (event.target.value.length > 0) {
+            axios.get(
+                `http://192.168.0.107:8080/api/v1/components/search/${event.target.value.trim()}`
+            ).then(value => {
+                setFilteredData(value.data)
+            })
+        }
+        // setFilteredData(data.filter(element => element["item-name"].toLowerCase().includes(event.target.value.toLowerCase())));
     }
 
     const navigation = useNavigate();
@@ -59,6 +68,9 @@ export const NavSearchPanel = () => {
             input.blur();
         }
     }
+    const getComponentTypeByServerComponentType = (componentType: string) => {
+        return componentType.toLowerCase().replace("_", "-")
+    }
 
     return (
         <div className="search-panel">
@@ -74,7 +86,7 @@ export const NavSearchPanel = () => {
                    onChange={handleInputChange}
             />
             <div className="search-title" onClick={toggleFocus}>
-                <p className="search-title-text">Search</p>
+                <p className="search-title-text">{translate("Search")}</p>
                 <div className={"search-icon"} onMouseDown={handleSearchIconClick}>
                     {!inputIsVisible || searchingValue.length === 0 ?
                         <SearchIcon/> :
@@ -88,11 +100,14 @@ export const NavSearchPanel = () => {
                 <div className="search-result-content">
                     {filteredData.length > 0 ?
                         filteredData.map((value: any, key: any) =>
-                            <SearchResultItem key={key} >
-                                {value["item-name"]}
+                            <SearchResultItem
+                                key={key}
+                                link={`/component/${getComponentTypeByServerComponentType(value["componentType"])}/${value["id"]}`}
+                            >
+                                {value["componentName"]}
                             </SearchResultItem>
-                        ).slice(0, 4)
-                        : <div className={"no-data-found"}>No data found</div>}
+                        ).slice(0, 5)
+                        : <div className={"no-data-found"}>{translate("No items found")}</div>}
                 </div>
             </div>}
         </div>)

@@ -1,8 +1,12 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 
 const LanguageContext = createContext<any>(null);
-export const Language = (props:any) => {
-    const [language, setLanguage] = useState('en');
+export const Language = (props: any) => {
+    const [language, setLanguage] = useState(localStorage.getItem("language") || 'ua');
+    useEffect(() => {
+        localStorage.setItem("language", language)
+    }, [language]);
+
 
     const translate = (key: any) => {
         const translations: any = {
@@ -21,3 +25,4 @@ export const Language = (props:any) => {
 export function useTranslation() {
     return useContext(LanguageContext);
 }
+

@@ -1,6 +1,6 @@
 import {CategoryItem} from "../components/CategoryItem";
-import React, {useEffect} from "react";
-import {Link} from "react-router-dom";
+import React from "react";
+import {useTranslation} from "../components/Language";
 
 export const cardsInfo = [
     {
@@ -55,31 +55,7 @@ export const cardsInfo = [
     }]
 
 export const Components = () => {
-    // useEffect(() => {
-    //     const categoryItems = Array.from(document.getElementsByClassName("category-item"));
-    //     const addClasses = (event: Event) => {
-    //         categoryItems
-    //             .filter(el => !el.contains(event.target as Node))
-    //             .forEach(el => el.classList.add("category-item-not-selected"));
-    //     }
-    //     const removeClasses = ()=>{
-    //         categoryItems
-    //             .forEach(el => el.classList.remove("category-item-not-selected"));
-    //     }
-    //     categoryItems.forEach(value => {
-    //             value.addEventListener('mouseover', addClasses);
-    //             value.addEventListener('mouseleave', removeClasses);
-    //         }
-    //     )
-    //     return ()=>{
-    //         categoryItems.forEach(value => {
-    //                 value.removeEventListener('mouseover', addClasses);
-    //                 value.removeEventListener('mouseleave', removeClasses);
-    //             }
-    //         )
-    //     }
-    // })
-
+    const {translate} = useTranslation()
     return (
         <div className={"content"}>
             <div className={"categories"}>
@@ -87,7 +63,7 @@ export const Components = () => {
                     <CategoryItem
                         key={key}
                         cardName={cardInfo.cardName}
-                        cardTitle={cardInfo.cardTitle}
+                        cardTitle={translate(cardInfo.cardTitle)}
                         picWidth={cardInfo.picWidth}
                     />
                 )}

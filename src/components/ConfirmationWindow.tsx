@@ -1,14 +1,12 @@
 import {Fragment, useEffect} from "react";
 import disableScroll from "disable-scroll";
+import {useTranslation} from "./Language";
 
 export const ConfirmationWindow = (props: any) => {
-
+    const {translate} = useTranslation()
     useEffect(() => {
         props.visibility ? disableScroll.on() : disableScroll.off();
     }, [props.visibility]);
-
-    // const message = "Are you sure you want to"
-    // const action = "logout"
 
     return (
         <div className={"confirmation-wrapper " + (props.visibility ? "visible" : "")}>
@@ -20,9 +18,12 @@ export const ConfirmationWindow = (props: any) => {
                     </div>
                 </div>
                 <div className="confirmation-message">
-                    {props.message}
-                    <span className="message-action"><Fragment> </Fragment>{props.action}?</span>
+                    <div>
+                        {translate(props.message)}
+                        <span className="message-action"><Fragment> </Fragment>{translate(props.action)}?</span>
+                    </div>
                 </div>
+
                 <div className="confirmation-buttons">
                     <button
                         className="confirmation-button"
@@ -31,7 +32,7 @@ export const ConfirmationWindow = (props: any) => {
                             props.setVisibility(false)
                         }}
                     >
-                        Yes
+                        {translate("Yes")}
                     </button>
                     <button
                         className="confirmation-button"
@@ -40,7 +41,7 @@ export const ConfirmationWindow = (props: any) => {
                             props.setVisibility(false)
                         }}
                     >
-                        No
+                        {translate("No")}
                     </button>
                 </div>
             </div>

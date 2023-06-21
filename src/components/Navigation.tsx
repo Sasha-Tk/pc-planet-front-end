@@ -18,6 +18,7 @@ import {SignUpSignInWindow} from "./SignUpSignInWindow";
 import {NavSearchPanel} from "./NavSearchPanel";
 import {ConfirmationWindow} from "./ConfirmationWindow";
 import {NavigationLink} from "./NavigationLink";
+import {useTranslation} from "./Language";
 
 enum BurgerMenuState {
     navigationState,
@@ -42,6 +43,8 @@ export const Navigation = (props: any) => {
         user,
         setUser
     } = useContext(AppContext);
+    const {language, setLanguage, translate} = useTranslation()
+
     const isMenuPageActive = (path: string) => {
         return !!matchPath({path: `/${path}/*`}, document.location.pathname)
     }
@@ -55,23 +58,31 @@ export const Navigation = (props: any) => {
             className="menu-dropdown-option-list-item"
             onClick={() => setModalWindowState(PopupMenuState.themeState)}
         >
-            Theme
+            {translate("Theme")}
             <RightArrowIcon/>
         </div>
         <div
             className="menu-dropdown-option-list-item"
             onClick={() => setModalWindowState(PopupMenuState.languageState)}
         >
-            Language
+            {translate("Language")}
             <RightArrowIcon/>
         </div>
         {user && <div
             className="menu-dropdown-option-list-item close-popup-element"
             onClick={() => {
-
+                navigate("/my-builds")
             }}
         >
-            Settings
+            {translate("My builds")}
+        </div>}
+        {user && <div
+            className="menu-dropdown-option-list-item close-popup-element"
+            onClick={() => {
+                navigate("/favorites")
+            }}
+        >
+            {translate("Favorites")}
         </div>}
         <div className="menu-dropdown-option-list-item close-popup-element"
              onClick={() => {
@@ -79,11 +90,10 @@ export const Navigation = (props: any) => {
                      setRegistrationWindowActive(true)
                  } else {
                      setLogOutConfirmation(true)
-                     // setUser(null)
                  }
              }}
         >
-            {user === null ? "Log in" : "Log out"}
+            {user === null ? translate("Log in") : translate("Log out")}
             {user === null ? <LogInIcon/> : <LogOutIcon/>}
         </div>
     </div>)
@@ -93,19 +103,19 @@ export const Navigation = (props: any) => {
             onClick={() => setModalWindowState(PopupMenuState.globalState)}
         >
             <LeftArrowIcon/>
-            Back
+            {translate("Back")}
         </div>
         <div
             className={"menu-dropdown-option-list-item" + (!darkThemeActive ? " selected-item" : "")}
             onClick={() => setDarkThemeActive(false)}
         >
-            Light
+            {translate("Light")}
             <SunIcon/>
         </div>
         <div className={"menu-dropdown-option-list-item" + (darkThemeActive ? " selected-item" : "")}
              onClick={() => setDarkThemeActive(true)}
         >
-            Dark
+            {translate("Dark")}
             <MoonIcon className={"icon"}/>
         </div>
     </div>)
@@ -115,13 +125,13 @@ export const Navigation = (props: any) => {
             onClick={() => setModalWindowState(PopupMenuState.globalState)}
         >
             <LeftArrowIcon/>
-            Back
+            {translate("Back")}
         </div>
-        <div className="menu-dropdown-option-list-item">
+        <div className={"menu-dropdown-option-list-item" + (language === "ua" ? " selected-item" : "")} onClick={() => setLanguage("ua")}>
             UA
             <UAIcon/>
         </div>
-        <div className="menu-dropdown-option-list-item">
+        <div className={"menu-dropdown-option-list-item" + (language === "en" ? " selected-item" : "")} onClick={() => setLanguage("en")}>
             EN
             <ENIcon/>
         </div>
@@ -144,12 +154,6 @@ export const Navigation = (props: any) => {
                 Create build
             </div>
             <div
-                className={'menu-dropdown-option-list-item ' + (isMenuPageActive('guides') ? 'selected-item' : '')}
-                onClick={() => navigate('/guides')}
-            >
-                Guides
-            </div>
-            <div
                 className={'menu-dropdown-option-list-item ' + (isMenuPageActive('search') ? 'selected-item' : '')}
                 onClick={() => navigate('/search')}
             >
@@ -160,7 +164,7 @@ export const Navigation = (props: any) => {
                  onClick={() => {
                      setTimeout(() => setBurgerMenuState(BurgerMenuState.profileState), 0);
                  }}>
-                {user === null ? "Profile" : user.username}
+                {user === null ? translate("Profile") : user.username}
             </div>
         </div>);
     burgerMenuWindows.set(BurgerMenuState.profileState, <div className="menu-dropdown-option-list">
@@ -197,7 +201,6 @@ export const Navigation = (props: any) => {
                      setRegistrationWindowActive(true)
                  } else {
                      setLogOutConfirmation(true)
-                     // setUser(null)
                  }
              }}
         >
@@ -248,22 +251,22 @@ export const Navigation = (props: any) => {
         <>
             <div className={"header"}>
                 <div className={"navigation"}>
-                    <NavLink to={'/home'}>
+                    <NavLink to={'/components'}>
                         <div className="logo">{darkThemeActive ? <DarkLogo/> : <LightLogo/>}</div>
                     </NavLink>
                     <NavigationLink link={'/components'}>
-                        Components
+                        {translate("Components")}
                     </NavigationLink>
                     <NavigationLink link={'/create-build'}>
-                        Create build
+                        {translate("Create build")}
                     </NavigationLink>
-                    <NavigationLink link={'/guides'}>
-                        Guides
-                    </NavigationLink>
+                    {/*<NavigationLink link={'/guides'}>*/}
+                    {/*    Guides*/}
+                    {/*</NavigationLink>*/}
                     <NavSearchPanel/>
                     <div className="drop-down">
                         <div className={"drop-down-button"} id={"drop-down-button-id"}>
-                            {user === null ? "Profile" : user.username}
+                            {user === null ? translate("Profile") : user.username}
                         </div>
                         <div className="menu-drop-down">
                             <PopupMenu
@@ -303,7 +306,7 @@ export const Navigation = (props: any) => {
             </div>
             <ConfirmationWindow
                 message={"Are you sure you want to"}
-                action={"logout"}
+                action={"log out"}
                 visibility={logoutConfirmation}
                 setVisibility={setLogOutConfirmation}
                 confirmationFunction={() => setUser(null)}

@@ -2,6 +2,7 @@ import {Link} from "react-router-dom";
 import {Skeleton} from "@mui/material";
 import React, {useState} from "react";
 import {LazyLoadImage} from "react-lazy-load-image-component";
+import {useTranslation} from "./Language";
 
 interface Props {
     cardName: string;
@@ -11,13 +12,14 @@ interface Props {
 
 export const CategoryItem = (props: Props) => {
     const [isLoading, setIsLoading] = useState(true);
+    const {language} = useTranslation()
     return (
         <Link to={`/components/${props.cardName}`}>
             <div className="category-item">
                 <div className="category-item-pic-holder">
                     <LazyLoadImage
                         className={`category-item-pic ${isLoading ? "loading" : ""}`}
-                        src={`http://localhost:8080/api/v1/content/${props.cardName}-pic.png`}
+                        src={`http://192.168.0.107:8080/api/v1/content/${props.cardName}-pic.png`}
                         afterLoad={() => setIsLoading(false)}
                         width={props.picWidth}
                     />
@@ -29,7 +31,7 @@ export const CategoryItem = (props: Props) => {
                         </div>
                     }
                 </div>
-                <p className={"category-item-title"}>{props.cardTitle}</p>
+                <p className={`category-item-title ${language}`}>{props.cardTitle}</p>
             </div>
         </Link>
     );

@@ -7,10 +7,12 @@ import * as validation from "yup"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {useContext, useEffect, useState} from "react";
 import {AppContext} from "../App";
+import {useTranslation} from "./Language";
 
 export const SignInWindow = (props: any) => {
     const {user, setUser} = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
+    const {translate} = useTranslation()
     const [errorMessage, setErrorMessage] = useState(
         {
             errorExist: false,
@@ -65,7 +67,7 @@ export const SignInWindow = (props: any) => {
                 <span id={"close-button-first-line"}></span>
                 <span id={"close-button-second-line"}></span>
             </div>
-            <p className={"register-window-title"}>Log in</p>
+            <p className={"register-window-title"}>{translate("Log in")}</p>
             <form
                 className={"register-form sign-in-form"}
                 autoComplete={"off"}
@@ -73,7 +75,7 @@ export const SignInWindow = (props: any) => {
             >
                 <div className="email-input">
                     <input className={"register-window-input input"}
-                           id={"email-input"} type={"email"} placeholder={"Email"}
+                           id={"email-input"} type={"email"} placeholder={translate("Email")}
                            {...register("email")}
                     />
                 </div>
@@ -81,7 +83,7 @@ export const SignInWindow = (props: any) => {
                 <p className="error-message">{errors.email?.message?.toString()}</p>
                 <div className="password-input">
                     <input className={"register-window-input input password-visibility"}
-                           id={"password-input"} type={"password"} placeholder={"Password"}
+                           id={"password-input"} type={"password"} placeholder={translate("Password")}
                            {...register("password")}
                     />
                     <div className="eye-icon"
@@ -91,7 +93,7 @@ export const SignInWindow = (props: any) => {
                 </div>
                 <div className={"password-errors"}>
                     <p className="error-message">{errors.password?.message?.toString()}</p>
-                    <p className={"forgot-password-link"}>Forgot your password?</p>
+                    {/*<p className={"forgot-password-link"}>Forgot your password?</p>*/}
                 </div>
 
                 <div className={`authentication-error-message-wrapper ${errorMessage.errorExist ? "with-error" : ""}`}>
@@ -101,17 +103,16 @@ export const SignInWindow = (props: any) => {
                 </div>
 
                 <button
-                    // value={"Log in"}
                     type={"submit"}
                     className={"continue-registration-button"}
-                >{isLoading ? "Loading..." : "Log in"}</button>
+                >{isLoading ? translate("Loading...") : translate("Log in")}</button>
             </form>
             <div className={"change-register-window"}>
-                Not a member?
+                {translate("Not a member?")}
                 <span
                     className={"link-on-register-window"}
                     onClick={() => props.setRegistrationWindowState(RegistrationWindowState.signUpState)}
-                >Sign Up</span>
+                >{translate("Sign Up")}</span>
             </div>
         </div>
     )

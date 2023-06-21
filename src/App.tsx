@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'
 import './App.css';
 
 import {Components} from "./pages/Components";
@@ -8,6 +8,10 @@ import {Build} from "./pages/Build";
 import {Search} from "./pages/Search";
 import {ComponentList} from "./pages/ComponentList";
 import {Language} from "./components/Language";
+import {Component} from "./pages/Component";
+import {MyBuilds} from "./pages/MyBuilds";
+import {Favorites} from "./pages/Favorites";
+import {default as Axios} from "axios";
 
 export const AppContext = createContext<any>(null);
 
@@ -17,17 +21,15 @@ function App() {
     const userFromStorage = localStorage.getItem("userInfo")
     const [user, setUser] = useState(userFromStorage !== null ? JSON.parse(userFromStorage) : null);
     const buildFromStorage = localStorage.getItem("currentBuild");
+    const [favorites, setFavorites] = useState([]);
     const [currentBuild, setCurrentBuild] = useState(
         buildFromStorage !== null ?
             JSON.parse(buildFromStorage)
-            : {
-                motherboard: null,
-                cpu: null,
-                gpu: null,
-                ram: null,
-                psu: null,
-                case: null,
-            })
+            : {})
+
+    useEffect(() => {
+        localStorage.setItem("currentBuild", JSON.stringify(currentBuild))
+    }, [currentBuild])
     const [currentFiltersToApply, setCurrentFiltersToApply] = useState({
         motherboard: [],
         cpu: [],
@@ -35,6 +37,10 @@ function App() {
         ram: [],
         psu: [],
         case: [],
+        ssd: [],
+        hdd: [],
+        cpuFan: [],
+        caseFan: []
     });
 
     const getComponentServerName = (name: any) => {
@@ -45,17 +51,26 @@ function App() {
             ram: "ram",
             psu: "psu",
             case: "computerCase",
+            ssd: "ssd",
+            hdd: "hdd",
+            "cpu-fan": "cpuFan",
+            "case-fan": "caseFan"
         }
         return map[name]
     }
 
-    // useEffect(() => {
-    //     console.log(currentFiltersToApply)
-    // }, [currentFiltersToApply]);
-
 
     useEffect(() => {
         localStorage.setItem("userInfo", JSON.stringify(user))
+        if (user) {
+            Axios.get(`http://192.168.0.107:8080/api/v1/users/${user?.id}/favorites`, {
+                headers: {
+                    Authorization: user?.token
+                }
+            }).then(value => {
+                setFavorites(value.data)
+            })
+        }
     }, [user])
     useEffect(() => {
         localStorage.setItem("darkThemeActive", JSON.stringify(darkThemeActive))
@@ -83,18 +98,24 @@ function App() {
                     setCurrentBuild,
                     currentFiltersToApply,
                     setCurrentFiltersToApply,
-                    getComponentServerName
+                    getComponentServerName,
+                    favorites,
+                    setFavorites
                 }}>
                 <Language>
-                        <BrowserRouter>
-                            <Navigation/>
-                            <Routes>
-                                <Route path={'/components'} element={<Components/>}/>
-                                <Route path={'/create-build'} element={<Build/>}/>
-                                <Route path={'/search/:search'} element={<Search/>}/>
-                                <Route path={'/components/:categoryName/:page?'} element={<ComponentList/>}/>
-                            </Routes>
-                        </BrowserRouter>
+                    <BrowserRouter>
+                        <Navigation/>
+                        <Routes>
+                            <Route path={'/*'} element={<Components/>}/>
+                            <Route path={'/components'} element={<Components/>}/>
+                            <Route path={'/favorites'} element={<Favorites/>}/>
+                            <Route path={'/create-build'} element={<Build/>}/>
+                            <Route path={'/my-builds'} element={<MyBuilds/>}/>
+                            <Route path={'/search/:search'} element={<Search/>}/>
+                            <Route path={'/components/:categoryName/:page?'} element={<ComponentList/>}/>
+                            <Route path={'/component/:categoryName/:id'} element={<Component/>}/>
+                        </Routes>
+                    </BrowserRouter>
                 </Language>
             </AppContext.Provider>
         </div>

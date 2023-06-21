@@ -11,6 +11,7 @@
   "cpuPowerConnector": "CPU connector type",
   "power": "Power",
   "vendor": "Vendor",
+  "size": "Size",
   "width": "Width",
   "recommendedPsuPower": "Min PSU power",
   "outputInterfaces": "Output interface",
@@ -20,7 +21,9 @@
   "memoryType": "Memory type",
   "memoryAmount": "Memory amount",
   "memoryFrequency": "Memory frequency",
+  "barsNumber": "Bars number",
   "chip": "Graphics chip",
+  "chipFrequency": "Chip frequency",
   "socket": "Socket",
   "chipset": "Chipset",
   "formFactor": "Form factor",
@@ -48,9 +51,10 @@
   "writeSpeed": "Write speed",
   "fanSize": "Fan size",
   "fanPowerConnector": "Fan power connector",
-  "rpm": "rpm",
+  "rpm": "Revolutions per minute",
   "maxNoiseLevel": "Max noise level",
   "caseFanCount": "Case fan count",
   "maxTdp": "Max TDP",
-  "cpuFanCount": "CPU fan count"
+  "cpuFanCount": "CPU fan count",
+  "-": "Non-available"
 }

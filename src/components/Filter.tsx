@@ -16,16 +16,6 @@ export const Filter = (props: any) => {
         handleRangeFilterChange()
     }, [props.filter.availableFilters]);
 
-    // useEffect(()=>{
-    //     const minInput: any = document.getElementById(props.filter.filterTitle + "-min-value")
-    //     const maxInput: any = document.getElementById(props.filter.filterTitle + "-max-value")
-    //     console.log("aboba")
-    //     if (minInput&&maxInput){
-    //         minInput.value = minValueTitle.current?.value
-    //         maxInput.value = maxValueTitle.current?.value
-    //     }
-    // },[minValueTitle.current, maxValueTitle.current])
-
     useEffect(() => {
         if (props.filter.filterType === "range") {
             const maxInput: any = document.getElementById(props.filter.filterTitle + "-max-value")
@@ -77,18 +67,12 @@ export const Filter = (props: any) => {
                         className={"input"}
                         readOnly={true}
                         value={props.filter.availableFilters[0]?.filterItemState}
-                        onChange={() => {
-
-                        }}
                     />
                     <input
                         ref={maxValueTitle}
                         className={"input"}
                         readOnly={true}
                         value={props.filter.availableFilters[1]?.filterItemState}
-                        onChange={() => {
-
-                        }}
                     />
                 </div>
                 <div className="range-input">
@@ -137,7 +121,7 @@ export const Filter = (props: any) => {
                     <div className="available-filter-item" key={key}
                          onClick={() => props.changeFilters(props.filter.filterTitle, value.id, !value.filterItemState)}>
                         <input className="checkbox" type="checkbox" readOnly={true} checked={Boolean(value.filterItemState)}/>
-                        <div>{value.filterItemName}</div>
+                        <div>{translate(value.filterItemName)}</div>
                     </div>
                 ) : <div className="filter-not-found">Filter not found</div>}
             </div>}

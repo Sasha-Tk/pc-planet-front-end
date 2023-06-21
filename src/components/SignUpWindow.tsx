@@ -7,11 +7,13 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {default as Axios} from "axios";
 import {AppContext} from "../App";
+import {useTranslation} from "./Language";
 
 export const SignUpWindow = (props: any) => {
     const {user, setUser} = useContext(AppContext);
     const [agreeState, setAgreeState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const {translate} = useTranslation()
     useEffect(() => {
         const button = document.getElementById("sign-up-button") as HTMLButtonElement;
         if (button) {
@@ -76,7 +78,7 @@ export const SignUpWindow = (props: any) => {
                     }
                 )
             }
-        }).finally(()=>{
+        }).finally(() => {
             setIsLoading(false)
         })
     }
@@ -86,7 +88,7 @@ export const SignUpWindow = (props: any) => {
                 <span id={"close-button-first-line"}></span>
                 <span id={"close-button-second-line"}></span>
             </div>
-            <p className={"register-window-title"}>Sign up</p>
+            <p className={"register-window-title"}>{translate("Sign up")}</p>
             <form
                 className={"register-form sign-up-form"}
                 autoComplete={"off"}
@@ -97,7 +99,7 @@ export const SignUpWindow = (props: any) => {
                         className={"register-window-input input"}
                         id={"email-input"}
                         type={"email"}
-                        placeholder={"Email"}
+                        placeholder={translate("Email")}
                         {...register("email")}
                     />
                 </div>
@@ -107,7 +109,7 @@ export const SignUpWindow = (props: any) => {
                         className={"register-window-input input"}
                         id={"user-name-input"}
                         type={"text"}
-                        placeholder={"User name"}
+                        placeholder={translate("User name")}
                         {...register("username")}
                     />
                 </div>
@@ -117,7 +119,7 @@ export const SignUpWindow = (props: any) => {
                         className={"register-window-input input password-visibility"}
                         id={"password-input"}
                         type={"password"}
-                        placeholder={"Password"}
+                        placeholder={translate("Password")}
                         {...register("password")}
                     />
                     <div className="eye-icon"
@@ -130,7 +132,7 @@ export const SignUpWindow = (props: any) => {
                     className={"register-window-input input password-visibility"}
                     id={"password-confirmation-input"}
                     type={"password"}
-                    placeholder={"Confirm password"}
+                    placeholder={translate("Confirm password")}
                     {...register("passwordConfirmation")}
                 />
                 <p className="error-message">{errors.passwordConfirmation?.message?.toString()}</p>
@@ -139,7 +141,8 @@ export const SignUpWindow = (props: any) => {
                            onChange={event => setAgreeState(event.target.checked)}
                            checked={agreeState}
                     />
-                    I agree to <span className={"link-on-register-window"}>Agree and Condition</span>
+                    {translate("I agree to")}
+                    <span className={"link-on-register-window"}>{translate("Agree and Condition")}</span>
                 </div>
                 <div className={`authentication-error-message-wrapper ${errorMessage.errorExist ? "with-error" : ""}`}>
                     <p className={"error-message"}>
@@ -152,15 +155,15 @@ export const SignUpWindow = (props: any) => {
                     id={"sign-up-button"}
                     disabled={!agreeState}
                     type={"submit"}
-                >{isLoading?"Loading...":"Sign up"}</button>
+                >{translate(isLoading ? "Loading..." : "Sign up")}</button>
             </form>
             <div className={"change-register-window"}>
-                Already registered?
+                {translate("Already registered?")}
                 <span
                     className={"link-on-register-window"}
                     onClick={() => props.setRegistrationWindowState(RegistrationWindowState.signInState)}
                 >
-                    Sign In
+                    {translate("Sign In")}
                 </span>
             </div>
         </div>
